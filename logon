@@ -1,0 +1,72 @@
+# Workstation-locked-unlocked
+logon/logoff files for event id 4800 and 4801
+
+
+using System;
+using System.IO;
+using System.Linq;
+using System.Globalization;
+
+namespace logon
+{
+    class logon
+    {
+        static void Main(string[] args)
+        {
+            if (!File.Exists("logon.txt")) streamWriterRegular();
+            else
+            {
+                
+                {
+                    DateTime lastDateInFile1 = lastDateInFile();
+                    //if (DateTime.Compare(DateTime.Now, lastDateInFile1) > 0)
+                    if (DateTime.Now.Day != lastDateInFile1.Day)
+                    {
+                        streamWriterNewDate();
+                    }
+                    else
+                    {
+                        streamWriterRegular();
+                    }
+                }
+            }
+        } 
+        public static void Log(string logMessage, TextWriter w)
+        {
+            w.WriteLine(logMessage);
+        }
+        public static DateTime yesterday(DateTime Now)
+        {
+            DateTime yesterday1 = Now.AddDays(-1);
+            return yesterday1; //return yesterday
+        }//Dont realy need this method 
+        public static DateTime lastDateInFile() // a function that says the last logged date
+        {
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            string lastLine = File.ReadLines("logon.txt").Last();
+            //  DateTime dt = DateTime.ParseExact(lastLine, "dddd dd-MM-yyyy HH:mm:ss",provider); 
+            DateTime dt = DateTime.ParseExact(lastLine, "dddd dd-MM-yyyy HH:mm:ss", provider);
+            return dt;
+        }
+        public static void streamWriterRegular()
+        {
+            using (StreamWriter w = File.AppendText("logon.txt"))
+            {
+                {
+                    string logon = string.Format("{0:dddd dd-MM-yyyy HH:mm:ss}", DateTime.Now);
+                    Log(logon, w);
+                }
+            }
+        }
+        public static void streamWriterNewDate()
+        {
+            using (StreamWriter w = File.AppendText("logon.txt"))
+            {
+                Log("This is a new day \n\n", w);
+                string logon = string.Format("{0:dddd dd-MM-yyyy HH:mm:ss}", DateTime.Now);
+                Log(logon, w);
+            }
+        }
+    }
+}
+
