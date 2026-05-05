@@ -15,8 +15,19 @@ namespace WorkstationLogger
 
         public static void Log(string logFile)
         {
-            // TODO: implement in Task 3
-            throw new NotImplementedException();
+            string timestamp = DateTime.Now.ToString(TimestampFormat, CultureInfo.InvariantCulture);
+
+            if (!File.Exists(logFile) || new FileInfo(logFile).Length == 0)
+            {
+                File.AppendAllText(logFile, timestamp + Environment.NewLine);
+                return;
+            }
+
+            DateTime? lastDate = GetLastDate(logFile);
+            using StreamWriter w = File.AppendText(logFile);
+            if (lastDate == null || lastDate.Value.Date != DateTime.Now.Date)
+                w.WriteLine("---");
+            w.WriteLine(timestamp);
         }
 
         public static DateTime? GetLastDate(string logFile)
