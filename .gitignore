@@ -1,0 +1,15 @@
+# Build artifacts
+bin/
+obj/
+publish/
+
+# Visual Studio
+.vs/
+*.user
+
+# Rider
+.idea/
+
+# Logs produced by the app
+logon.txt
+logoff.txt
