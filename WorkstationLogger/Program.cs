@@ -10,7 +10,18 @@ namespace WorkstationLogger
 
         static void Main(string[] args)
         {
-            // TODO: implement in Task 4
+            if (args.Length == 0 || (args[0] != "lock" && args[0] != "unlock"))
+            {
+                Console.Error.WriteLine("Usage: WorkstationLogger.exe lock|unlock");
+                Environment.Exit(1);
+            }
+
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string logFile = args[0] == "lock"
+                ? Path.Combine(baseDir, "logoff.txt")
+                : Path.Combine(baseDir, "logon.txt");
+
+            Log(logFile);
         }
 
         public static void Log(string logFile)
